@@ -1,4 +1,3 @@
-// src/main/socket/index.js
 const { Server } = require('socket.io');
 
 let ioInstance = null;
@@ -6,29 +5,27 @@ let ioInstance = null;
 function initializeSocket(httpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: ['http://localhost:5173', 'http://localhost:3000', 'https://cp-frontend-9ti0.onrender.com'],
+      origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'https://cp-frontend-9ti0.onrender.com',
+      ],
+      methods: ['GET', 'POST'],
       credentials: true,
     },
-    pingInterval: 2500,
-    pingTimeout: 6000,
+    pingInterval: 25000,
+    pingTimeout: 20000,
   });
 
   ioInstance = io;
 
-  // Register feature-specific handlers
   require('./handlers/presence')(io);
-
-  // You can add more later, e.g.:
-  // require('./handlers/chat')(io);
-  // require('./handlers/collaboration')(io);
 
   return io;
 }
 
 function getIO() {
-  if (!ioInstance) {
-    throw new Error('Socket.IO not yet initialized');
-  }
+  if (!ioInstance) throw new Error('Socket.IO not yet initialized');
   return ioInstance;
 }
 
