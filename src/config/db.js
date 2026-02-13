@@ -1,11 +1,11 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "postgres", 
-  password: "root",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  // Optional but good: ssl for Render (they require it on some setups)
+  ssl: {
+    rejectUnauthorized: false  // Common for self-signed certs on Render
+  }
 });
 
 pool.on('error', (err) => {
